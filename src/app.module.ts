@@ -11,17 +11,22 @@ import * as Joi from 'joi';
 @Module({
   imports: [
     ConfigModule.forRoot({
-  isGlobal: true,
-  validationSchema: Joi.object({
-        PORT: Joi.number().default(3000),
+    isGlobal: true,
+    envFilePath: `.env.${process.env.NODE_ENV || 'development'}`,
+    validationSchema: Joi.object({
+      NODE_ENV: Joi.string()
+        .valid('development', 'staging', 'production')
+        .default('development'),
 
-        MONGO_URI: Joi.string().required(),
+      PORT: Joi.number().default(3000),
 
-        JWT_SECRET: Joi.string().min(10).required(),
+      MONGO_URI: Joi.string().required(),
+      JWT_SECRET: Joi.string().min(10).required(),
 
-        REDIS_HOST: Joi.string().default('localhost'),
-        REDIS_PORT: Joi.number().default(6379),
-      })}),
+      REDIS_HOST: Joi.string().required(),
+      REDIS_PORT: Joi.number().default(6379),
+    }),
+}),
     MongooseModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
