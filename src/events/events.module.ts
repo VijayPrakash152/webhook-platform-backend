@@ -7,6 +7,7 @@ import {
   WebhookSubscription,
   WebhookSubscriptionSchema,
 } from '../webhooks/webhook.schema';
+import { QueueModule } from 'src/queue/queue.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import {
       { name: WebhookEvent.name, schema: WebhookEventSchema },
       { name: WebhookSubscription.name, schema: WebhookSubscriptionSchema },
     ]),
+    QueueModule,
   ],
   providers: [EventsService],
   controllers: [EventsController],

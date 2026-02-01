@@ -31,5 +31,8 @@ import { ConfigService } from '@nestjs/config';
     ]),
   ],
   providers: [WebhookProcessor],
+  exports: [
+    BullModule, // exports the queue provider
+  ],
 })
 export class QueueModule {}
