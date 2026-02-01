@@ -1,0 +1,41 @@
+version: "3.9"
+
+services:
+  api:
+    container_name: webhook-platform-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env.development   # 👈 switch env here if needed
+    environment:
+      NODE_ENV: development
+    depends_on:
+      - mongodb
+      - redis
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: npm run start:dev
+    restart: unless-stopped
+
+  mongodb:
+    container_name: webhook-platform-mongodb
+    image: mongo:6
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    restart: unless-stopped
+
+  redis:
+    container_name: webhook-platform-redis
+    image: redis:7
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+
+volumes:
+  mongo_data:
